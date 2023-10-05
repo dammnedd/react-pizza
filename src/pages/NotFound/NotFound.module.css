@@ -1,0 +1,30 @@
+.notFound {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 50px - 135px - 50px - 40px);
+  justify-content: center;
+}
+
+.title {
+  font-size: 148px;
+}
+
+.desc {
+  font-size: 40px;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.button {
+  font-size: 30px;
+  border: 2px #000 solid;
+  padding: 10px 20px;
+  background: none;
+  border-radius: 15px;
+  transition: transform 0.3s ease;
+}
+
+.button:hover {
+  transform: scale(1.1);
+}

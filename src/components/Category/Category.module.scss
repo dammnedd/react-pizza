@@ -1,6 +1,18 @@
 @import '../../scss/variables';
 
+.content {
+  overflow: auto;
+  width: 100%;
+  scrollbar-width: none;
+
+  &:webkit-scrollbar {
+    display: none;
+  }
+}
+
 .categories {
+  width: 100%;
+
   ul {
     display: flex;
 
@@ -29,3 +41,18 @@
     }
   }
 }
+
+@media (max-width: 540px) {
+  .categories {
+    ul {
+      li {
+        padding: 7px 18px;
+      }
+    }
+  }
+}
+
+// .active {
+//   background-color: #282828;
+//   color: #fff;
+// }

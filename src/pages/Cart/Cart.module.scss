@@ -1,0 +1,154 @@
+@import '../../scss/variables';
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 94px;
+  padding-bottom: 30px;
+  border-bottom: 1px #f4f4f4 solid;
+}
+
+@media (max-width: 600px) {
+  .top {
+    flex-direction: column;
+  }
+
+  .topRight {
+    margin-top: 10px;
+  }
+}
+
+.topLeft {
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 29px;
+    height: 29px;
+    margin-right: 17px;
+  }
+
+  span {
+    font-size: 32px;
+    font-weight: 700;
+  }
+}
+
+.topRight {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  span {
+    color: #b6b6b6;
+    font-size: 16px;
+    font-weight: 400;
+    margin-left: 7px;
+  }
+
+  &:hover span {
+    color: black;
+  }
+
+  &:hover svg path {
+    stroke: black;
+  }
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.bottomLeft {
+  display: flex;
+  flex-direction: column;
+}
+
+.countPizza {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40px;
+
+  span {
+    font-size: 22px;
+    font-weight: 400;
+  }
+
+  h5 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-left: 5px;
+  }
+}
+
+.back {
+  display: flex;
+  color: #cacaca;
+  font-weight: 400;
+  align-items: center;
+  padding: 17px 31px;
+  border: 1px #d3d3d3 solid;
+  background: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  img {
+    margin-right: 10px;
+  }
+}
+
+.bottomRight {
+  display: flex;
+  flex-direction: column;
+}
+
+.sumPizza {
+  display: flex;
+  align-items: center;
+
+  span {
+    font-size: 22px;
+    font-weight: 400;
+    margin-right: 5px;
+  }
+
+  h5 {
+    font-size: 22px;
+    font-weight: 700;
+    color: $orange;
+  }
+}
+
+.pay {
+  font-size: 16px;
+  color: white;
+  font-weight: 700;
+  padding: 17px 31px;
+  background: $orange;
+  border: none;
+  transition: transform 0.3s ease;
+  border-radius: 30px;
+  margin-top: 30px;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}

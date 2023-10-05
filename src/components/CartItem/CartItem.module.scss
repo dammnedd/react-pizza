@@ -1,0 +1,72 @@
+@import '../../scss/variables';
+
+.cartItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px #f4f4f4 solid;
+  padding-bottom: 30px;
+  padding-top: 30px;
+}
+
+@media (max-width: 850px) {
+  .cartItem {
+    flex-direction: column;
+  }
+
+  .title {
+    margin-bottom: 5px;
+  }
+
+  .count {
+    margin: 10px 0;
+  }
+
+  .price {
+    margin: 5px 0;
+  }
+}
+
+.title {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.desc {
+  font-size: 18px;
+  font-weight: 400;
+  color: #8d8d8d;
+}
+
+.count {
+  display: flex;
+  align-items: center;
+}
+
+.plus {
+  cursor: pointer;
+}
+
+.countNumber {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 0 16px;
+}
+
+.price {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.xMark {
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover circle {
+    stroke: black;
+  }
+
+  &:hover path {
+    fill: black;
+  }
+}
