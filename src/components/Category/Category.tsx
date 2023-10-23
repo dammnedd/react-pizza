@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import styles from './Category.module.scss';
 import AppContext from '../../hooks/Context';
+import {useDispatch} from "react-redux";
+import {changeCategory} from "../../store/reducers/categorySlice.ts";
+import {useAppSelector} from "../../hooks/redux.ts";
 
 const Category = () => {
-  const [activeIndex, setActiveIndex] = React.useState(0);
-  const { pizzas, setCategoryValue, setPage } = React.useContext(AppContext);
+  const dispatch = useDispatch()
+  const {categoryValue} = useAppSelector(state => state.categorySlice)
 
-  const handleClickCategory = (item, num) => {
-    setActiveIndex(num);
-    setPage(1);
-    setCategoryValue(num);
+  const handleClickCategory = (num: number) => {
+    dispatch(changeCategory(num))
   };
 
   const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
@@ -22,9 +23,9 @@ const Category = () => {
             categories.map((item, index) => {
               return (
                 <li
-                  onClick={() => handleClickCategory(item, index)}
+                  onClick={() => handleClickCategory(index)}
                   key={index}
-                  className={`${activeIndex === index ? styles.active : ''}`}
+                  className={`${categoryValue === index ? styles.active : ''}`}
                 >
                   {item}
                 </li>

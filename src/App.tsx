@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header/Header';
 import styles from './scss/app.module.scss';
 import axios from 'axios';
@@ -7,27 +7,26 @@ import AppContext from './hooks/Context';
 import { Routes, Route } from 'react-router-dom';
 import NotFound from './pages/NotFound/NotFound';
 import Cart from './pages/Cart/Cart';
+import {useAppSelector} from "./hooks/redux.ts";
+import {setPageQuantity, setIsLoading} from "./store/reducers/pageSlice.ts";
+import {useDispatch} from "react-redux";
 
-function App() {
+const App: React.FC = () => {
   const [pizzas, setPizzas] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [categoryValue, setCategoryValue] = useState(0);
-  const [page, setPage] = useState(1);
-  const [pageQty, setPageQty] = useState(0);
-  const [limit] = useState(6);
-  const [sortType, setSortType] = useState({
-    name: 'популярности',
-    sort: 'rating',
-  });
   const [searchValue, setSearchValue] = useState('');
   const BASE_URL = 'https://650ab658dfd73d1fab08bf7a.mockapi.io/pizzas?';
+  const { type, sortProperty, name } = useAppSelector((state) => state.SortSlice.sort)
+  const { page, limit, isLoading } = useAppSelector(state => state.pageSlice)
+  const { categoryValue } = useAppSelector(state => state.categorySlice)
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         axios.get(BASE_URL).then(({ data }) => {
-          setPageQty(Math.ceil(data.length / limit));
-          console.log(pageQty);
+          // setPageQty(Math.ceil(data.length / limit));
+          dispatch(setPageQuantity(Math.ceil(data.length / limit)))
         });
       } catch (e) {
         console.log(e);
@@ -42,33 +41,29 @@ function App() {
         const response = await axios.get(
           `${BASE_URL}${
             categoryValue !== 0
-              ? `category=${categoryValue}&sortBy=${sortType.sort}&order=${sortType.type}&search=${searchValue}&page=${page}&limit=${limit}`
-              : `sortBy=${sortType.sort}&order=${sortType.type}&search=${searchValue}&page=${page}&limit=${limit}`
+              ? `category=${categoryValue}&sortBy=${sortProperty}&order=${type}&search=${searchValue}&page=${page}&limit=${limit}`
+              : `sortBy=${sortProperty}&order=${type}&search=${searchValue}&page=${page}&limit=${limit}`
           }`,
         );
         setPizzas(response.data);
-        setIsLoading(false);
+        dispatch(setIsLoading(false))
         console.log(response.data);
       } catch (e) {
         console.log(e);
       }
     };
     fetchData();
-    setIsLoading(true);
-  }, [categoryValue, sortType, searchValue, page]);
+    dispatch(setIsLoading(true))
+  }, [categoryValue, name, searchValue, page]);
 
   return (
     <AppContext.Provider
       value={{
         pizzas,
         isLoading,
-        setCategoryValue,
-        setSortType,
         setSearchValue,
         searchValue,
         page,
-        setPage,
-        pageQty,
       }}
     >
       <div className={styles.wrapper}>

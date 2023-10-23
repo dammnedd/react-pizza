@@ -1,13 +1,14 @@
 import React from 'react';
 import styles from './Sort.module.scss';
-import AppContext from '../../hooks/Context';
+import {changeSortProperty, changeOpen, mouseEntered} from "../../store/reducers/sortSlice.ts";
+import {useDispatch} from "react-redux";
+import {useAppSelector} from "../../hooks/redux.ts";
+import {listState} from "../../types/sort";
 
-const Sort = () => {
-  const [open, setOpen] = React.useState(false);
-  const [mouseEntered, setMouseEntered] = React.useState(1);
-  const [sortValue, setSortValue] = React.useState('популярности');
+
+const Sort: React.FC = () => {
   const divRef = React.useRef(null);
-  const list = [
+  const list: listState[] = [
     { name: 'популярности ↓', sort: 'rating', type: 'desc' },
     { name: 'популярности ↑', sort: 'rating', type: 'asc' },
     { name: 'цене ↓', sort: 'price', type: 'desc' },
@@ -15,7 +16,9 @@ const Sort = () => {
     { name: 'алфавиту ↓', sort: 'title', type: 'desc' },
     { name: 'алфавиту ↑', sort: 'title', type: 'asc' },
   ];
-  const { setSortType } = React.useContext(AppContext);
+  const dispatch = useDispatch()
+  const { sort, open, mouseValue } = useAppSelector((state) => state.SortSlice)
+
 
   React.useEffect(() => {
     document.addEventListener('click', clickOutside);
@@ -25,20 +28,19 @@ const Sort = () => {
     };
   }, []);
 
-  const handleClickSort = (item, index) => {
-    setSortValue(item.name);
-    setSortType(item);
+  const handleClickSort = (item: listState) => {
+    dispatch(changeSortProperty(item))
   };
 
-  const clickOutside = (event) => {
+  const clickOutside = (event: Event) => {
     if (divRef.current && !divRef.current.contains(event.target)) {
-      setOpen(false);
+      dispatch(changeOpen(false))
     }
   };
 
   return (
     <div ref={divRef} className={styles.sort}>
-      <div onClick={() => setOpen(!open)} className={styles.label}>
+      <div onClick={() => dispatch(changeOpen(!open))} className={styles.label}>
         <div>
           <svg
             width="10"
@@ -54,7 +56,7 @@ const Sort = () => {
           </svg>
           <b>Сортировка по:</b>
         </div>
-        <span>{sortValue}</span>
+        <span>{sort.name}</span>
       </div>
       {open && (
         <div className={styles.popup}>
@@ -64,10 +66,10 @@ const Sort = () => {
                 return (
                   <li
                     key={index}
-                    className={`${mouseEntered === index ? 'active' : ''}`}
-                    onMouseEnter={() => setMouseEntered(index)}
-                    onMouseLeave={() => setMouseEntered(null)}
-                    onClick={() => handleClickSort(item, index)}
+                    className={`${mouseValue === index ? 'active' : ''}`}
+                    onMouseEnter={() => mouseEntered(index)}
+                    onMouseLeave={() => mouseEntered(null)}
+                    onClick={() => handleClickSort(item)}
                   >
                     {item.name}
                   </li>
