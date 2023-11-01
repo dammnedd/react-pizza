@@ -2,13 +2,29 @@ import React from 'react';
 import styles from './Header.module.scss';
 import { Link } from 'react-router-dom';
 import AppContext from '../../hooks/Context';
+import {useDispatch} from "react-redux";
+import {setSearchValue} from "../../store/reducers/mainSlice.ts";
 
 const Header = () => {
-  const { setSearchValue } = React.useContext(AppContext);
   const inputRef = React.useRef(null);
+  const dispatch = useDispatch()
   const takeSearchValue = () => {
-    setSearchValue(inputRef.current.value.toLowerCase());
+    dispatch(setSearchValue(inputRef.current.value.toLowerCase()))
   };
+
+  const debounce = (callback, ms) => {
+    let time
+    return function() {
+      clearTimeout(time)
+      time = setTimeout(() => callback.apply(this, arguments), ms)
+      console.log(arguments)
+    }
+  }
+
+  // const f = debounce(takeSearchValue, 1000)
+  // f(2)
+
+
   return (
     <header className={styles.header}>
       <div className={styles.container}>
@@ -28,7 +44,7 @@ const Header = () => {
           <input
             ref={inputRef}
             id="input"
-            onChange={() => takeSearchValue()}
+            onChange={debounce(takeSearchValue, 1000)}
             type="text"
             placeholder="Поиск пиццы"
           />

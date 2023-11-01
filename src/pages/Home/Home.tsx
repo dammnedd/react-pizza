@@ -2,13 +2,15 @@ import React from 'react';
 import styles from './Home.module.scss';
 import Sort from '../../components/Sort/Sort.tsx';
 import Category from '../../components/Category/Category.tsx';
-import PizzaBlock from '../../components/PizzaBlock/PizzaBlock';
+import PizzaBlock from '../../components/PizzaBlock/PizzaBlock.tsx';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import AppContext from '../../hooks/Context';
 import Pagination from '../../components/Pagination/Pagination.tsx';
+import {useAppSelector} from "../../hooks/redux.ts";
 
-const Home = () => {
-  const { pizzas, isLoading, searchValue } = React.useContext(AppContext);
+const Home: React.FC = () => {
+  const {pizzas} = useAppSelector(state => state.mainSlice)
+    const { isLoading } = useAppSelector(state => state.pageSlice)
 
   return (
     <>
@@ -25,7 +27,7 @@ const Home = () => {
           : pizzas &&
             pizzas
               // .filter((item) => item.title.toLowerCase().includes(searchValue))
-              .map((item, index) => {
+              .map((item, index: number) => {
                 return <PizzaBlock {...item} key={index} />;
               })}
       </div>

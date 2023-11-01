@@ -2,22 +2,24 @@ import React, { useState, useEffect } from 'react';
 import Header from './components/Header/Header';
 import styles from './scss/app.module.scss';
 import axios from 'axios';
-import Home from './pages/Home/Home';
+import Home from './pages/Home/Home.tsx';
 import AppContext from './hooks/Context';
 import { Routes, Route } from 'react-router-dom';
 import NotFound from './pages/NotFound/NotFound';
 import Cart from './pages/Cart/Cart';
 import {useAppSelector} from "./hooks/redux.ts";
 import {setPageQuantity, setIsLoading} from "./store/reducers/pageSlice.ts";
+import {setPizzas} from "./store/reducers/mainSlice.ts";
 import {useDispatch} from "react-redux";
 
 const App: React.FC = () => {
-  const [pizzas, setPizzas] = useState([]);
-  const [searchValue, setSearchValue] = useState('');
+  // const [pizzas, setPizzas] = useState([]);
+  // const [searchValue, setSearchValue] = useState('');
   const BASE_URL = 'https://650ab658dfd73d1fab08bf7a.mockapi.io/pizzas?';
   const { type, sortProperty, name } = useAppSelector((state) => state.SortSlice.sort)
   const { page, limit, isLoading } = useAppSelector(state => state.pageSlice)
   const { categoryValue } = useAppSelector(state => state.categorySlice)
+  const { searchValue, pizzas } = useAppSelector(state => state.mainSlice)
 
   const dispatch = useDispatch()
 
@@ -25,7 +27,6 @@ const App: React.FC = () => {
     const fetchData = async () => {
       try {
         axios.get(BASE_URL).then(({ data }) => {
-          // setPageQty(Math.ceil(data.length / limit));
           dispatch(setPageQuantity(Math.ceil(data.length / limit)))
         });
       } catch (e) {
@@ -45,7 +46,7 @@ const App: React.FC = () => {
               : `sortBy=${sortProperty}&order=${type}&search=${searchValue}&page=${page}&limit=${limit}`
           }`,
         );
-        setPizzas(response.data);
+        dispatch(setPizzas(response.data))
         dispatch(setIsLoading(false))
         console.log(response.data);
       } catch (e) {
@@ -59,10 +60,8 @@ const App: React.FC = () => {
   return (
     <AppContext.Provider
       value={{
-        pizzas,
+        // pizzas,
         isLoading,
-        setSearchValue,
-        searchValue,
         page,
       }}
     >

@@ -1,18 +1,19 @@
 import React from 'react';
 import styles from './PizzaBlock.module.scss';
+import {setActiveType, setActiveSize} from "../../store/reducers/pizzaBlockSlice.ts";
+import {useDispatch} from "react-redux";
+import {useAppSelector} from "../../hooks/redux.ts";
 
-const PizzaBlock = ({ imageUrl, title, types, sizes, price, category, rating }) => {
-  const [activeType, setActiveType] = React.useState(0);
-  const [activeSize, setActiveSize] = React.useState(0);
-  const [countPizza, setCountPizza] = React.useState(1);
-  const [isFirstAdd, setIsFirstAdd] = React.useState(false);
+const PizzaBlock: React.FC = ({ imageUrl, title, types, sizes, price, category, rating }) => {
+  // const [activeType, setActiveType] = React.useState(0);
+  // const [activeSize, setActiveSize] = React.useState(0);
+  const dispatch = useDispatch()
+  const { activeSize, activeType } = useAppSelector(state => state.pizzaBlockSlice)
+
 
   const typeNames = ['тонкое', 'традиционное'];
 
-  const handleClickAddButton = () => {
-    setIsFirstAdd(!isFirstAdd);
-    console.log(isFirstAdd);
-  };
+
 
   return (
     <div className={styles.pizzaBlock}>
@@ -21,10 +22,10 @@ const PizzaBlock = ({ imageUrl, title, types, sizes, price, category, rating }) 
       <div className={styles.selector}>
         <ul>
           {types &&
-            types.map((item, index) => {
+            types.map((item: number, index: number) => {
               return (
                 <li
-                  onClick={() => setActiveType(index)}
+                  onClick={() => dispatch(setActiveType(index))}
                   className={`${activeType === index ? styles.activeType : ''}`}
                   key={index}
                 >
@@ -35,10 +36,10 @@ const PizzaBlock = ({ imageUrl, title, types, sizes, price, category, rating }) 
         </ul>
         <ul>
           {sizes &&
-            sizes.map((item, index) => {
+            sizes.map((item: number, index: number) => {
               return (
                 <li
-                  onClick={() => setActiveSize(index)}
+                  onClick={() => dispatch(setActiveSize(index))}
                   className={`${activeSize === index ? styles.activeType : ''}`}
                   key={index}
                 >
@@ -50,7 +51,7 @@ const PizzaBlock = ({ imageUrl, title, types, sizes, price, category, rating }) 
       </div>
       <div className={styles.bottom}>
         <div className={styles.price}>от {price} ₽</div>
-        <button onClick={() => handleClickAddButton()} className={styles.button}>
+        <button className={styles.button}>
           <svg
             width="12"
             height="12"
@@ -64,7 +65,6 @@ const PizzaBlock = ({ imageUrl, title, types, sizes, price, category, rating }) 
             />
           </svg>
           <span>Добавить</span>
-          {isFirstAdd && <div className={styles.countPizza}>{countPizza}</div>}
         </button>
       </div>
     </div>
