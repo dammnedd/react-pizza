@@ -1,5 +1,4 @@
 
-
 export interface mainState {
     pizzas: pizzaItem | null;
     searchValue: string;

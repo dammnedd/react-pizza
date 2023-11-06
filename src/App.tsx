@@ -1,26 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import Header from './components/Header/Header';
+import Header from './components/Header/Header.tsx';
 import styles from './scss/app.module.scss';
 import axios from 'axios';
 import Home from './pages/Home/Home.tsx';
 import AppContext from './hooks/Context';
 import { Routes, Route } from 'react-router-dom';
 import NotFound from './pages/NotFound/NotFound';
-import Cart from './pages/Cart/Cart';
+import Cart from './pages/Cart/Cart.tsx';
 import {useAppSelector} from "./hooks/redux.ts";
 import {setPageQuantity, setIsLoading} from "./store/reducers/pageSlice.ts";
 import {setPizzas} from "./store/reducers/mainSlice.ts";
 import {useDispatch} from "react-redux";
 
-const App: React.FC = () => {
-  // const [pizzas, setPizzas] = useState([]);
-  // const [searchValue, setSearchValue] = useState('');
-  const BASE_URL = 'https://650ab658dfd73d1fab08bf7a.mockapi.io/pizzas?';
-  const { type, sortProperty, name } = useAppSelector((state) => state.SortSlice.sort)
-  const { page, limit, isLoading } = useAppSelector(state => state.pageSlice)
-  const { categoryValue } = useAppSelector(state => state.categorySlice)
-  const { searchValue, pizzas } = useAppSelector(state => state.mainSlice)
 
+export const BASE_URL = 'https://650ab658dfd73d1fab08bf7a.mockapi.io/pizzas';
+
+
+const App: React.FC = () => {
+  const { page, limit } = useAppSelector(state => state.pageSlice)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -34,40 +31,38 @@ const App: React.FC = () => {
       }
     };
     fetchData();
+
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${BASE_URL}${
-            categoryValue !== 0
-              ? `category=${categoryValue}&sortBy=${sortProperty}&order=${type}&search=${searchValue}&page=${page}&limit=${limit}`
-              : `sortBy=${sortProperty}&order=${type}&search=${searchValue}&page=${page}&limit=${limit}`
-          }`,
-        );
-        dispatch(setPizzas(response.data))
-        dispatch(setIsLoading(false))
-        console.log(response.data);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    fetchData();
-    dispatch(setIsLoading(true))
-  }, [categoryValue, name, searchValue, page]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${BASE_URL}?${
+  //           categoryValue !== 0
+  //             ? `category=${categoryValue}&sortBy=${sortProperty}&order=${type}&search=${searchValue}&page=${page}&limit=${limit}`
+  //             : `sortBy=${sortProperty}&order=${type}&search=${searchValue}&page=${page}&limit=${limit}`
+  //         }`,
+  //       );
+  //       dispatch(setPizzas(response.data))
+  //       dispatch(setIsLoading(false))
+  //       console.log(response.data);
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   };
+  //   // fetchData();
+  //   // dispatch(setIsLoading(true))
+  // }, [categoryValue, name, searchValue, page]);
 
   return (
     <AppContext.Provider
       value={{
-        // pizzas,
-        isLoading,
-        page,
+
       }}
     >
       <div className={styles.wrapper}>
         <Header />
-
         <div className={styles.content}>
           <div className={styles.container}>
             <Routes>

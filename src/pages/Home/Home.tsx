@@ -7,10 +7,26 @@ import Skeleton from '../../components/Skeleton/Skeleton';
 import AppContext from '../../hooks/Context';
 import Pagination from '../../components/Pagination/Pagination.tsx';
 import {useAppSelector} from "../../hooks/redux.ts";
+import {pizzaItem} from "../../types/main.ts";
+import {fetchPizza} from "../../store/services/pizzaService.ts";
+import {paramsCategory, paramsTypes} from "../../types/params";
+import category from "../../components/Category/Category.tsx";
+
 
 const Home: React.FC = () => {
   const {pizzas} = useAppSelector(state => state.mainSlice)
-    const { isLoading } = useAppSelector(state => state.pageSlice)
+    // const { isLoading } = useAppSelector(state => state.pageSlice)
+
+    const { type, sortProperty } = useAppSelector((state) => state.SortSlice.sort)
+    const { page, limit } = useAppSelector(state => state.pageSlice)
+    const { categoryValue } = useAppSelector(state => state.categorySlice)
+    const { searchValue } = useAppSelector(state => state.mainSlice)
+
+    const params: paramsTypes = {type, sortProperty, page, limit, searchValue, categoryValue}
+
+    const {data: allPizzas, isLoading, error} = fetchPizza.useFetchAllPizzasQuery(params, {})
+
+
 
   return (
     <>
@@ -24,13 +40,19 @@ const Home: React.FC = () => {
           ? [...new Array(6)].map((_, index) => {
               return <Skeleton key={index} />;
             })
-          : pizzas &&
-            pizzas
+          : allPizzas &&
+            allPizzas
               // .filter((item) => item.title.toLowerCase().includes(searchValue))
-              .map((item, index: number) => {
+              .map((item: pizzaItem, index: number) => {
                 return <PizzaBlock {...item} key={index} />;
               })}
       </div>
+        {
+            error &&
+            <h1 className={styles.error}>
+                Не удалось загрузить пиццы, попробуйте снова 😔
+            </h1>
+        }
       <Pagination />
     </>
   );

@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {FC} from 'react';
 import styles from './Cart.module.scss';
 import CartItem from '../../components/CartItem/CartItem';
 
-const Cart = () => {
+
+const Cart: FC = () => {
+
+
   return (
     <>
       <div className={styles.container}>

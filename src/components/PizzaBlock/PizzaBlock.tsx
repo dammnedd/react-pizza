@@ -1,14 +1,13 @@
 import React from 'react';
 import styles from './PizzaBlock.module.scss';
-import {setActiveType, setActiveSize} from "../../store/reducers/pizzaBlockSlice.ts";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "../../hooks/redux.ts";
+import {pizzaItem} from "../../types/main";
 
-const PizzaBlock: React.FC = ({ imageUrl, title, types, sizes, price, category, rating }) => {
-  // const [activeType, setActiveType] = React.useState(0);
-  // const [activeSize, setActiveSize] = React.useState(0);
+const PizzaBlock: React.FC<pizzaItem> = ({ imageUrl, title, types, sizes, price, category, rating }) => {
+  const [activeType, setActiveType] = React.useState(0);
+  const [activeSize, setActiveSize] = React.useState(0);
   const dispatch = useDispatch()
-  const { activeSize, activeType } = useAppSelector(state => state.pizzaBlockSlice)
 
 
   const typeNames = ['тонкое', 'традиционное'];
@@ -25,7 +24,7 @@ const PizzaBlock: React.FC = ({ imageUrl, title, types, sizes, price, category, 
             types.map((item: number, index: number) => {
               return (
                 <li
-                  onClick={() => dispatch(setActiveType(index))}
+                  onClick={() => setActiveType(index)}
                   className={`${activeType === index ? styles.activeType : ''}`}
                   key={index}
                 >
@@ -39,7 +38,7 @@ const PizzaBlock: React.FC = ({ imageUrl, title, types, sizes, price, category, 
             sizes.map((item: number, index: number) => {
               return (
                 <li
-                  onClick={() => dispatch(setActiveSize(index))}
+                  onClick={() => setActiveSize(index)}
                   className={`${activeSize === index ? styles.activeType : ''}`}
                   key={index}
                 >

@@ -5,7 +5,7 @@ import AppContext from '../../hooks/Context';
 import {useDispatch} from "react-redux";
 import {setSearchValue} from "../../store/reducers/mainSlice.ts";
 
-const Header = () => {
+const Header: React.FC = () => {
   const inputRef = React.useRef(null);
   const dispatch = useDispatch()
   const takeSearchValue = () => {
