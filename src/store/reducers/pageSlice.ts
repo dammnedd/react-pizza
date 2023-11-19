@@ -24,10 +24,13 @@ const pageSlice = createSlice({
         },
         setIsLoading(state, action: PayloadAction<boolean>) {
             state.isLoading = action.payload
+        },
+        setLimit(state, action: PayloadAction<number>) {
+            state.limit = action.payload
         }
     }
 })
 
 
 export default pageSlice.reducer
-export const { setPage, setPageQuantity, changePageValue, setIsLoading } = pageSlice.actions
+export const { setPage, setPageQuantity, changePageValue, setIsLoading, setLimit } = pageSlice.actions

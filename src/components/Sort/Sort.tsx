@@ -1,12 +1,11 @@
-import React from 'react';
+import React, {memo} from 'react';
 import styles from './Sort.module.scss';
 import {changeSortProperty, changeOpen, mouseEntered} from "../../store/reducers/sortSlice.ts";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "../../hooks/redux.ts";
 import {listState} from "../../types/sort";
 
-
-const Sort: React.FC = () => {
+const Sort: React.FC = memo(() => {
   const divRef = React.useRef(null);
   const list: listState[] = [
     { name: 'популярности ↓', sort: 'rating', type: 'desc' },
@@ -28,15 +27,15 @@ const Sort: React.FC = () => {
     };
   }, []);
 
-  const handleClickSort = (item: listState) => {
+  const handleClickSort = React.useCallback((item: listState) => {
     dispatch(changeSortProperty(item))
-  };
+  }, [])
 
-  const clickOutside = (event: Event) => {
+  const clickOutside = React.useCallback((event: MouseEvent) => {
     if (divRef.current && !divRef.current.contains(event.target)) {
       dispatch(changeOpen(false))
     }
-  };
+  }, [])
 
   return (
     <div ref={divRef} className={styles.sort}>
@@ -80,6 +79,6 @@ const Sort: React.FC = () => {
       )}
     </div>
   );
-};
+})
 
 export default Sort;

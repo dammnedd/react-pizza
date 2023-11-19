@@ -1,19 +1,18 @@
-import React, { useState } from 'react';
+import React, {memo, useState} from 'react';
 import styles from './Category.module.scss';
-import AppContext from '../../hooks/Context';
 import {useDispatch} from "react-redux";
 import {changeCategory} from "../../store/reducers/categorySlice.ts";
 import {setPage} from "../../store/reducers/pageSlice.ts";
 import {useAppSelector} from "../../hooks/redux.ts";
 
-const Category = () => {
+const Category = memo(() => {
   const dispatch = useDispatch()
   const {categoryValue} = useAppSelector(state => state.categorySlice)
 
-  const handleClickCategory = (num: number) => {
+  const handleClickCategory = React.useCallback((num: React.MouseEvent<HTMLLIElement>) => {
     dispatch(changeCategory(num))
     dispatch(setPage(1))
-  };
+  }, []);
 
   const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
@@ -37,6 +36,6 @@ const Category = () => {
       </div>
     </div>
   );
-};
+})
 
 export default Category;

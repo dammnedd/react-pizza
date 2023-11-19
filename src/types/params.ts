@@ -6,5 +6,12 @@ export interface paramsTypes {
     page: number;
     limit: number;
     searchValue: string;
-    categoryValue: number
+    categoryValue: number;
+}
+
+export interface paramsWithoutLimit {
+    type: string;
+    sortProperty: string;
+    searchValue: string;
+    categoryValue: number;
 }

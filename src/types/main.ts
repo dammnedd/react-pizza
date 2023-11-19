@@ -1,7 +1,8 @@
 
 export interface mainState {
-    pizzas: pizzaItem | null;
+    pizzas: pizzaItem[]
     searchValue: string;
+    isCart: boolean;
 }
 
 
@@ -14,5 +15,8 @@ export interface pizzaItem {
     sizes: number[];
     title: string;
     types: number[];
-
+    parentId: number;
+    quantity: number;
+    typeName: string;
+    sizeName: number;
 }

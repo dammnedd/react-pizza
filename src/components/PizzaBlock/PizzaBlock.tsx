@@ -1,18 +1,56 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './PizzaBlock.module.scss';
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "../../hooks/redux.ts";
 import {pizzaItem} from "../../types/main";
+import {fetchCart} from "../../store/services/cartService.ts";
 
-const PizzaBlock: React.FC<pizzaItem> = ({ imageUrl, title, types, sizes, price, category, rating }) => {
-  const [activeType, setActiveType] = React.useState(0);
-  const [activeSize, setActiveSize] = React.useState(0);
-  const dispatch = useDispatch()
-
-
+const PizzaBlock: React.FC<pizzaItem> = ({ imageUrl, title, types, sizes, price, id }) => {
   const typeNames = ['тонкое', 'традиционное'];
+  const [activeType, setActiveType] = useState<number>(0);
+  const [activeNameType, setActiveNameType] = useState<string>(typeNames[types[0]])
+  const [activeSize, setActiveSize] = useState<number>(0);
+  const [activeNameSize, setActiveNameSize] = useState<number>(sizes[0])
+  const [buttonClicked, setButtonClicked] = useState<boolean>(false)
 
+  const dispatch = useDispatch()
+  const {pizzas} = useAppSelector(state => state.mainSlice)
+  const { cartItems } = useAppSelector(state => state.cartSlice)
+  const [ addToCard ] = fetchCart.useAddToCartMutation()
+  const [ deleteCartItem ] = fetchCart.useDeleteCartItemMutation()
 
+    const {page} = useAppSelector(state => state.pageSlice)
+
+  useEffect(() => {
+    const item = cartItems.find((item) => Number(item.parentId) === Number(id))
+    if (item) {
+      setButtonClicked(true)
+    } else {
+      setButtonClicked(false)
+    }
+    setActiveType(0)
+  }, [id]);
+
+  const handleAdd = async () => {
+      setButtonClicked(!buttonClicked)
+    const foundItem = cartItems.find((item) => Number(item.parentId) === Number(id))
+    if (foundItem) {
+      await deleteCartItem(foundItem?.id)
+    } else {
+      await addToCard({...pizzas[id], parentId: id, typeName: activeNameType, sizeName: activeNameSize})
+    }
+  }
+
+  const handleClickType = (item: number, index: number) => {
+    setActiveType(index)
+    setActiveNameType(typeNames[item])
+  }
+
+  const handleClickSize = (item: number, index: number) => {
+    setActiveSize(index)
+    console.log(item, index)
+    setActiveNameSize(item)
+  }
 
   return (
     <div className={styles.pizzaBlock}>
@@ -24,7 +62,7 @@ const PizzaBlock: React.FC<pizzaItem> = ({ imageUrl, title, types, sizes, price,
             types.map((item: number, index: number) => {
               return (
                 <li
-                  onClick={() => setActiveType(index)}
+                  onClick={() => handleClickType(item, index)}
                   className={`${activeType === index ? styles.activeType : ''}`}
                   key={index}
                 >
@@ -38,7 +76,7 @@ const PizzaBlock: React.FC<pizzaItem> = ({ imageUrl, title, types, sizes, price,
             sizes.map((item: number, index: number) => {
               return (
                 <li
-                  onClick={() => setActiveSize(index)}
+                  onClick={() => handleClickSize(item, index)}
                   className={`${activeSize === index ? styles.activeType : ''}`}
                   key={index}
                 >
@@ -50,7 +88,7 @@ const PizzaBlock: React.FC<pizzaItem> = ({ imageUrl, title, types, sizes, price,
       </div>
       <div className={styles.bottom}>
         <div className={styles.price}>от {price} ₽</div>
-        <button className={styles.button}>
+        <button onClick={handleAdd} className={[styles.button, buttonClicked ? styles.buttonActive : ''].join(' ')}>
           <svg
             width="12"
             height="12"

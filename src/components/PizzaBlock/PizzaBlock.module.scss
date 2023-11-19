@@ -107,6 +107,7 @@
   padding: 10px;
   align-items: center;
   transition: all 0.2s ease-in-out;
+  cursor: pointer;
 
   svg {
     margin-right: 7px;
@@ -143,4 +144,21 @@
   border-radius: 50%;
   font-weight: bold;
   font-size: 13px;
+}
+
+.buttonActive {
+  transform: scale(1.1);
+
+    background-color: $orange;
+
+    span {
+      color: white;
+    }
+
+    svg {
+      path {
+        fill: white;
+      }
+    }
+
 }
